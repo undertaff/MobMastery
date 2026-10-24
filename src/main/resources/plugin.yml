@@ -1,0 +1,20 @@
+name: MobMastery
+version: 1.0.0
+main: com.mobmastery.MobMastery
+api-version: '1.21'
+author: YourName
+description: Leveled mobs, tool skills with abilities, and a built-in anti-lag system.
+commands:
+  rpg:
+    description: Main command
+    aliases: [mobmastery, mm]
+    usage: /<command> help
+  skills:
+    description: Show your tool skills and abilities
+    aliases: [skill, beceri]
+    usage: /<command>
+permissions:
+  mobmastery.use:
+    default: true
+  mobmastery.admin:
+    default: op

@@ -1,0 +1,120 @@
+prefix: "&8[&6MobMastery&8] &r"
+no-permission: "&cYou do not have permission."
+players-only: "&cOnly players can use this."
+reloaded: "&aConfig and language files reloaded."
+
+lang:
+  changed: "&aLanguage set to &e{lang}&a."
+  usage: "&7Usage: &e/rpg lang <en|tr> &7(current: &f{current}&7)"
+  invalid: "&cUnknown language. Available: en, tr"
+
+help:
+  - "&6&lMobMastery &7- commands"
+  - "&e/skills &7- show your tool skills and abilities"
+  - "&e/rpg lang <en|tr> &7- change your language"
+  - "&e/rpg status &7- anti-lag status (admin)"
+  - "&e/rpg cleanup &7- clean ground items and excess mobs now (admin)"
+  - "&e/rpg reload &7- reload config (admin)"
+  - "&e/rpg setlevel <player> <skill> <level> &7- set a skill level (admin)"
+
+skill:
+  sword: "Sword"
+  axe: "Axe"
+  pickaxe: "Pickaxe"
+  shovel: "Shovel"
+
+ranks:
+  - "Novice"
+  - "Apprentice"
+  - "Trainee"
+  - "Journeyman"
+  - "Skilled"
+  - "Experienced"
+  - "Expert"
+  - "Veteran"
+  - "Elite"
+  - "Master"
+  - "Grandmaster"
+  - "Champion"
+  - "Hero"
+  - "Legend"
+  - "Mythic"
+  - "Immortal"
+
+skills:
+  header: "&6&m      &r &6&lYour Skills &6&m      "
+  line: "&e{skill} &8- &7Lv.&a{level}&7/&a{max} &8[&b{rank}&8] &7XP: &f{xp}&7/&f{need}"
+  max-xp: "MAX"
+  abilities-header: "&6&lAbilities"
+  ability-unlocked: "&a+ {name} &8- &7{desc}"
+  ability-locked: "&8- {name} &8(unlocks at {skill} Lv.{level})"
+
+levelup:
+  title: "&6&lLEVEL UP!"
+  subtitle: "&e{skill} &7Lv.&a{level} &8- &b{rank}"
+  chat: "&6{skill} &ereached level &a{level} &e- rank &b{rank}&e!"
+  max-broadcast: "&6{player} &ereached the maximum &6{skill} &elevel!"
+
+xp:
+  actionbar: "&7{skill} &a+{xp} XP &8(&f{cur}&7/&f{need}&8)"
+
+ability:
+  unlocked-title: "&d&lABILITY UNLOCKED"
+  unlocked-subtitle: "&f{ability}"
+  unlocked-chat: "&dNew ability unlocked: &f{ability} &8- &7{desc}"
+  lifesteal:
+    name: "Vampiric Strike"
+    desc: "Chance to heal when you hit a mob."
+  executioner:
+    name: "Executioner"
+    desc: "Bonus damage to mobs below 30% health."
+  cleave:
+    name: "Cleave"
+    desc: "Chance to hit nearby hostile mobs too."
+  lumberjack:
+    name: "Lumberjack"
+    desc: "Chance to get double logs."
+  haste:
+    name: "Efficient Miner"
+    desc: "Mining gives you a Haste boost."
+  doubledrop:
+    name: "Double Drop"
+    desc: "Chance to get double drops from ores and stone."
+  jackpot:
+    name: "Jackpot"
+    desc: "Small chance for triple drops from ores and stone."
+  digger:
+    name: "Fast Digger"
+    desc: "Digging gives you a Haste boost."
+  treasure:
+    name: "Treasure Hunter"
+    desc: "Small chance to dig up buried treasure."
+  shoveldrop:
+    name: "Rich Soil"
+    desc: "Chance to get double drops when digging."
+
+proc:
+  double: "&6Double drop!"
+  triple: "&6&lJACKPOT! &eTriple drop!"
+  treasure: "&bYou found buried treasure!"
+
+mob:
+  rare-drop: "&d&lRARE DROP! &f{item} &7from a Lv.{level} {mob}"
+
+admin:
+  usage-setlevel: "&cUsage: /rpg setlevel <player> <sword|axe|pickaxe|shovel> <level>"
+  player-not-found: "&cPlayer not found (must be online)."
+  setlevel-ok: "&a{player}'s {skill} level is now {level}."
+
+antilag:
+  clear-warning: "&eGround items will be cleared in &c{seconds} &esecond(s)!"
+  clear-done: "&aCleared &f{items} &aground items."
+  lag-on: "&cLag detected (TPS ~{tps}). Natural spawns paused and emergency cleanup started."
+  lag-off: "&aTPS recovered (~{tps}). Natural spawns resumed."
+  memory-high: "&cMemory usage is high ({used}/{max} MB). Cleanup started."
+  cleanup-done: "&aRemoved &f{entities} &aexcess mobs and &f{items} &aground items."
+  status:
+    - "&6&lAnti-Lag status"
+    - "&7Estimated TPS: &f{tps}"
+    - "&7Lag mode: &f{mode}"
+    - "&7Memory: &f{used}&7/&f{max} MB"
