@@ -11,12 +11,14 @@ public class MobMastery extends JavaPlugin {
     private SkillManager skills;
     private MobLevelManager mobs;
     private AntiLagManager antiLag;
+    private HudManager hud;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         data = new DataManager(this);
         lang = new LangManager(this);
+        hud = new HudManager(this);
         skills = new SkillManager(this);
         mobs = new MobLevelManager(this);
         antiLag = new AntiLagManager(this);
@@ -36,6 +38,7 @@ public class MobMastery extends JavaPlugin {
         }
 
         antiLag.start();
+        hud.start();
         // Autosave every 5 minutes (written on a background thread)
         getServer().getScheduler().runTaskTimer(this, () -> data.saveAllAsync(), 20L * 60 * 5, 20L * 60 * 5);
         getLogger().info("MobMastery enabled.");
@@ -44,6 +47,7 @@ public class MobMastery extends JavaPlugin {
     @Override
     public void onDisable() {
         if (antiLag != null) antiLag.stop();
+        if (hud != null) hud.stop();
         if (data != null) data.saveAll();
     }
 
@@ -59,4 +63,5 @@ public class MobMastery extends JavaPlugin {
     public SkillManager skills() { return skills; }
     public MobLevelManager mobs() { return mobs; }
     public AntiLagManager antiLag() { return antiLag; }
+    public HudManager hud() { return hud; }
 }

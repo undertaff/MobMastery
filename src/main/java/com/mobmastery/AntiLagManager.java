@@ -37,24 +37,29 @@ import java.util.Set;
 
 /**
  * Lightweight anti-lag: everything runs on slow timers (no per-tick work).
- * - trims overcrowded chunks, clears old ground items with a warning,
+ * - trims overcrowded chunks, clears old ground items with a short countdown,
  * - pauses natural spawns in crowded chunks or when TPS drops ("lag mode"),
  * - reacts to high heap usage. It never calls System.gc().
+ * Messages are quiet: the item countdown uses the action bar (no chat spam) and admin alerts
+ * go to the console and are rate-limited.
  */
 public class AntiLagManager implements Listener {
 
     private enum Group { MONSTER, ANIMAL, OTHER }
 
+    private static final long ALERT_COOLDOWN_MS = 300_000L;
+
     private final MobMastery plugin;
     private final List<BukkitTask> tasks = new ArrayList<>();
 
-    private boolean enabled, limitSpawns;
-    private int maxMonsters, maxAnimals, maxOthers, hardCap, minItemAge, itemIntervalSec, countdown;
+    private boolean enabled, limitSpawns, adminChat, quietCycle;
+    private String notifyMode = "actionbar";
+    private int maxMonsters, maxAnimals, maxOthers, hardCap, minItemAge, itemIntervalSec, countdown, announceMin;
     private double lagTps, recoverTps, memThreshold;
-    private boolean announceItems = true;
     private final Set<Material> keep = new HashSet<>();
     private final Set<String> disabledWorlds = new HashSet<>();
     private final List<Integer> warnTimes = new ArrayList<>();
+    private final Map<String, Long> lastAlert = new HashMap<>();
 
     private volatile boolean lagMode = false;
     private double tps = 20.0;
@@ -72,12 +77,15 @@ public class AntiLagManager implements Listener {
         enabled = c.getBoolean(p + "enabled", true);
         if (!enabled) return;
 
+        adminChat = c.getBoolean(p + "admin-chat-alerts", false);
         maxMonsters = Math.max(1, c.getInt(p + "entity-limits.max-monsters-per-chunk", 16));
         maxAnimals = Math.max(1, c.getInt(p + "entity-limits.max-animals-per-chunk", 20));
         maxOthers = Math.max(1, c.getInt(p + "entity-limits.max-other-per-chunk", 10));
         limitSpawns = c.getBoolean(p + "spawn-limiter.enabled", true);
         hardCap = Math.max(10, c.getInt(p + "spawn-limiter.chunk-entity-hard-cap", 70));
         minItemAge = Math.max(0, c.getInt(p + "item-clear.min-item-age-seconds", 20)) * 20;
+        notifyMode = c.getString(p + "item-clear.notify", "actionbar").toLowerCase();
+        announceMin = Math.max(0, c.getInt(p + "item-clear.announce-min-items", 20));
         lagTps = c.getDouble(p + "tps-watch.lag-tps", 16.0);
         recoverTps = c.getDouble(p + "tps-watch.recover-tps", 18.5);
         memThreshold = c.getDouble(p + "memory-watch.threshold", 0.92);
@@ -95,6 +103,7 @@ public class AntiLagManager implements Listener {
         lastNano = 0;
         lowCount = 0;
         memHits = 0;
+        quietCycle = false;
         lagMode = false;
         tps = 20.0;
 
@@ -120,24 +129,38 @@ public class AntiLagManager implements Listener {
         tasks.clear();
     }
 
-    // ------------------------------------------------------------ helpers
+    // ------------------------------------------------------------ messages (quiet)
 
-    private void broadcast(String key, String... kv) {
+    /** Countdown / result for players: action bar by default, so the chat stays clean. */
+    private void notifyPlayers(String key, String... kv) {
+        if (notifyMode.equals("none")) return;
         LangManager L = plugin.lang();
         for (Player pl : Bukkit.getOnlinePlayers()) {
-            pl.sendMessage(L.get(pl, "prefix") + L.get(pl, key, kv));
+            String msg = L.get(pl, key, kv);
+            if (notifyMode.equals("chat")) pl.sendMessage(L.get(pl, "prefix") + msg);
+            else plugin.skills().notice(pl, msg);
         }
     }
 
+    /** Admin alerts: console only (and chat if enabled), at most once per 5 minutes per alert type. */
     private void notifyAdmins(String key, String... kv) {
+        long now = System.currentTimeMillis();
+        Long last = lastAlert.get(key);
+        if (last != null && now - last < ALERT_COOLDOWN_MS) return;
+        lastAlert.put(key, now);
+
         LangManager L = plugin.lang();
-        Bukkit.getConsoleSender().sendMessage(L.get(L.defaultCode(), "prefix") + L.get(L.defaultCode(), key, kv));
+        String code = L.defaultCode();
+        Bukkit.getConsoleSender().sendMessage(L.get(code, "prefix") + L.get(code, key, kv));
+        if (!adminChat) return;
         for (Player pl : Bukkit.getOnlinePlayers()) {
             if (pl.hasPermission("mobmastery.admin")) {
                 pl.sendMessage(L.get(pl, "prefix") + L.get(pl, key, kv));
             }
         }
     }
+
+    // ------------------------------------------------------------ helpers
 
     private Group classify(LivingEntity le) {
         if (le instanceof Boss) return null;
@@ -196,15 +219,28 @@ public class AntiLagManager implements Listener {
         return removed;
     }
 
+    private boolean clearable(Item it, int minAgeTicks) {
+        if (it.getTicksLived() < minAgeTicks) return false;
+        ItemStack st = it.getItemStack();
+        if (keep.contains(st.getType())) return false;
+        return !(st.hasItemMeta() && st.getItemMeta().hasDisplayName());
+    }
+
+    private int countClearable(int minAgeTicks) {
+        int n = 0;
+        for (World w : Bukkit.getWorlds()) {
+            if (disabledWorlds.contains(w.getName())) continue;
+            for (Item it : w.getEntitiesByClass(Item.class)) if (clearable(it, minAgeTicks)) n++;
+        }
+        return n;
+    }
+
     public int clearItems(int minAgeTicks) {
         int removed = 0;
         for (World w : Bukkit.getWorlds()) {
             if (disabledWorlds.contains(w.getName())) continue;
             for (Item it : w.getEntitiesByClass(Item.class)) {
-                if (it.getTicksLived() < minAgeTicks) continue;
-                ItemStack st = it.getItemStack();
-                if (keep.contains(st.getType())) continue;
-                if (st.hasItemMeta() && st.getItemMeta().hasDisplayName()) continue;
+                if (!clearable(it, minAgeTicks)) continue;
                 it.remove();
                 removed++;
             }
@@ -221,7 +257,9 @@ public class AntiLagManager implements Listener {
         lastEmergency = System.currentTimeMillis();
         int e = trimEntities(0.5);
         int i = clearItems(300);
-        notifyAdmins("antilag.cleanup-done", "entities", String.valueOf(e), "items", String.valueOf(i));
+        if (e > 0 || i > 0) {
+            notifyAdmins("antilag.cleanup-done", "entities", String.valueOf(e), "items", String.valueOf(i));
+        }
     }
 
     // ------------------------------------------------------------ timers
@@ -231,10 +269,19 @@ public class AntiLagManager implements Listener {
         if (countdown <= 0) {
             int n = clearItems(minItemAge);
             countdown = itemIntervalSec;
-            if (announceItems && n > 0) broadcast("antilag.clear-done", "items", String.valueOf(n));
+            if (n >= announceMin && n > 0) notifyPlayers("antilag.clear-done", "items", String.valueOf(n));
             return;
         }
-        if (warnTimes.contains(countdown)) broadcast("antilag.clear-warning", "seconds", String.valueOf(countdown));
+        if (warnTimes.isEmpty()) return;
+        int first = 0;
+        for (int w : warnTimes) first = Math.max(first, w);
+        if (countdown == first + 1) {
+            // decide once per cycle: only warn when there is enough on the ground to matter
+            quietCycle = countClearable(minItemAge) < Math.max(1, announceMin);
+        }
+        if (!quietCycle && warnTimes.contains(countdown)) {
+            notifyPlayers("antilag.clear-warning", "seconds", String.valueOf(countdown));
+        }
     }
 
     /** Runs every 100 ticks (should take exactly 5 s). A slower run means a lower TPS. */

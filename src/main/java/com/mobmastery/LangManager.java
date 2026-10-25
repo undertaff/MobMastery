@@ -79,6 +79,15 @@ public class LangManager {
         return out;
     }
 
+    /** Translated mob name (falls back to English, then to a prettified type name). */
+    public String mobName(String code, String type) {
+        String key = "mobs." + type;
+        YamlConfiguration y = langs.getOrDefault(code, langs.get("en"));
+        String v = y.getString(key);
+        if (v == null) v = langs.get("en").getString(key);
+        return v == null ? Util.pretty(type) : v;
+    }
+
     public void send(CommandSender s, String key, String... kv) {
         s.sendMessage(get(s, "prefix") + get(s, key, kv));
     }

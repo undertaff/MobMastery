@@ -1,31 +1,119 @@
 # ---------------------------------------------------------------
-# MobMastery configuration
+# MobMastery configuration (v1.1.0)
 # ---------------------------------------------------------------
-# Default language for the server: en or tr
+# Default server language: en or tr
 # Every player can pick their own with /rpg lang <en|tr>
+# NOTE: mob name tags are shared by all players, so they use this server language.
 language: en
 
 # ---------------- MOB LEVEL SYSTEM ----------------
 mob-levels:
   enabled: true
   max-level: 60
-  # Chance that a hostile mob gets a level (0.5 = half of them are leveled, half are normal)
+  # Chance that a hostile mob gets a level (0.5 = half leveled, half normal)
   leveled-chance: 0.5
-  # Mobs get stronger the farther they spawn from the world spawn
-  blocks-per-level: 100
-  nether-bonus: 15
-  end-bonus: 30
+  # Level range per dimension. The farther from the center (world spawn / 0,0),
+  # the higher inside the range. full-level-distance = blocks needed to reach max-level.
+  dimensions:
+    overworld:
+      min-level: 1
+      max-level: 35
+      full-level-distance: 3500
+    nether:
+      min-level: 10
+      max-level: 60
+      full-level-distance: 600
+    end:
+      min-level: 1
+      max-level: 10
+      full-level-distance: 500
   # Each level adds this much extra "health" (damage taken is divided) and damage dealt
   health-per-level: 0.10
   damage-per-level: 0.025
   # Each level adds this much extra vanilla XP orb drop
   xp-per-level: 0.03
-  show-name: true
+  # false = the name tag only shows when you look straight at the mob (no X-ray through walls)
+  show-name-always: false
+  # server = use the "language" option above, or write en / tr
+  name-language: server
   name-format: "&8[{color}Lv.{level}&8] &c{name}"
   # Extra drops only when a player kills the mob
   only-player-kill: true
   disabled-worlds: []
-  excluded-types: []
+  excluded-types:
+    - WARDEN
+
+  # Random armor for leveled mobs (only some mobs, only sometimes).
+  # The rarest set is rolled first; the first successful roll wins.
+  armor:
+    enabled: true
+    # chance (0.0 - 1.0) that a worn piece drops when the mob dies
+    drop-chance: 0.05
+    mobs:
+      - ZOMBIE
+      - ZOMBIE_VILLAGER
+      - HUSK
+      - DROWNED
+      - SKELETON
+      - STRAY
+      - BOGGED
+      - WITHER_SKELETON
+      - PIGLIN
+      - PIGLIN_BRUTE
+      - ZOMBIFIED_PIGLIN
+    sets:
+      netherite:
+        min-level: 52
+        max-level: 60
+        chance: 0.004
+        piece-chance: 1.0
+      diamond:
+        min-level: 35
+        max-level: 60
+        chance: 0.015
+        piece-chance: 0.8
+      iron:
+        min-level: 15
+        max-level: 45
+        chance: 0.035
+        piece-chance: 0.8
+      chainmail:
+        min-level: 20
+        max-level: 45
+        chance: 0.025
+        piece-chance: 0.8
+      golden:
+        min-level: 8
+        max-level: 35
+        chance: 0.04
+        piece-chance: 0.8
+      leather:
+        min-level: 1
+        max-level: 25
+        chance: 0.06
+        piece-chance: 0.8
+
+  # Very rare strange items. 'chance' is checked once per kill; if it succeeds, ONE item is
+  # picked from the list. The last number of each item is its weight (higher = more likely).
+  oddities:
+    enabled: true
+    chance: 0.012
+    # normal (non-leveled) hostile mobs use chance x this value
+    normal-mob-multiplier: 0.5
+    items:
+      - "GOAT_HORN:1:1:0.004"
+      - "ECHO_SHARD:1:1:0.003"
+      - "DISC_FRAGMENT_5:1:2:0.004"
+      - "HEART_OF_THE_SEA:1:1:0.002"
+      - "NAUTILUS_SHELL:1:1:0.004"
+      - "SADDLE:1:1:0.004"
+      - "NAME_TAG:1:1:0.006"
+      - "SPONGE:1:2:0.004"
+      - "DIAMOND_HORSE_ARMOR:1:1:0.002"
+      - "TOTEM_OF_UNDYING:1:1:0.002"
+      - "ENCHANTED_GOLDEN_APPLE:1:1:0.001"
+      - "ELYTRA:1:1:0.0003"
+
   # Drop format -> "MATERIAL:min:max:chance"  (chance 0.0 - 1.0)
   tiers:
     tier-1:
@@ -85,6 +173,16 @@ mob-levels:
         - "ENCHANTED_GOLDEN_APPLE:1:1:0.005"
         - "NETHERITE_INGOT:1:1:0.003"
 
+# ---------------- HUD (on-screen display) ----------------
+hud:
+  enabled: true
+  # bottom-center line above the hotbar while holding a sword/axe/pickaxe/shovel:
+  # health, mana, skill level and right-click ability status
+  actionbar: true
+  # top-center XP bar that appears when you gain XP and disappears after a few seconds
+  xp-bar: true
+  xp-bar-seconds: 4
+
 # ---------------- TOOL SKILLS ----------------
 skills:
   max-level: 80
@@ -94,7 +192,6 @@ skills:
   xp-multiplier: 1.0
   # Sword/axe damage bonus per skill level (0.004 -> +32% at level 80)
   damage-per-level: 0.004
-  actionbar: true
   xp:
     kill-normal: 4
     kill-leveled-base: 6
@@ -105,6 +202,29 @@ skills:
     stone: 1
     log: 3
     dirt: 1
+  # Mana is used by the right-click abilities
+  mana:
+    base: 50
+    per-level: 0.5
+    regen-per-second: 3
+  # Right-click abilities (unlock at skill level 5).
+  # Right-click in the air, or sneak + right-click on a block, while holding the tool.
+  active:
+    slash:
+      mana: 25
+      cooldown: 6
+      damage: 6
+    slam:
+      mana: 30
+      cooldown: 8
+      damage: 5
+    frenzy:
+      mana: 35
+      cooldown: 25
+      seconds: 12
+    leap:
+      mana: 20
+      cooldown: 6
   abilities:
     lifesteal-chance: 0.15
     lifesteal-amount: 2.0
@@ -129,6 +249,9 @@ skills:
 anti-lag:
   enabled: true
   disabled-worlds: []
+  # Admin alerts always go to the console (max once per 5 minutes per alert type).
+  # Set true to also send them to admins in chat.
+  admin-chat-alerts: false
   # Removes the oldest excess mobs per chunk (never tamed, leashed, name-tagged or ridden mobs)
   entity-limits:
     enabled: true
@@ -144,7 +267,12 @@ anti-lag:
   item-clear:
     enabled: true
     interval-minutes: 5
-    warn-seconds: [30, 10, 5, 3, 2, 1]
+    # actionbar (default, no chat spam), chat, or none
+    notify: actionbar
+    # countdown (in seconds) shown before clearing. Only shown when enough items are on the ground.
+    warn-seconds: [5, 4, 3, 2, 1]
+    # "cleared X items" is only announced when at least this many items were removed
+    announce-min-items: 20
     min-item-age-seconds: 20
     keep-materials:
       - ELYTRA

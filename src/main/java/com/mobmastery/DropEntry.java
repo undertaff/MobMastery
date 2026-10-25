@@ -47,6 +47,11 @@ public final class DropEntry {
         return out;
     }
 
+    /** The chance (or weight) value from the config line. */
+    public double chanceValue() {
+        return chance;
+    }
+
     /** Rolls the chance. Returns null when nothing drops. */
     public ItemStack roll(Random r) {
         if (r.nextDouble() >= chance) return null;

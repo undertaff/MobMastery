@@ -11,6 +11,7 @@ lang:
 help:
   - "&6&lMobMastery &7- commands"
   - "&e/skills &7- show your tool skills and abilities"
+  - "&7Hold a tool and &eright-click &7(or sneak + right-click a block) to use its ability."
   - "&e/rpg lang <en|tr> &7- change your language"
   - "&e/rpg status &7- anti-lag status (admin)"
   - "&e/rpg cleanup &7- clean ground items and excess mobs now (admin)"
@@ -50,30 +51,50 @@ skills:
   ability-locked: "&8- {name} &8(unlocks at {skill} Lv.{level})"
 
 levelup:
-  title: "&6&lLEVEL UP!"
-  subtitle: "&e{skill} &7Lv.&a{level} &8- &b{rank}"
-  chat: "&6{skill} &ereached level &a{level} &e- rank &b{rank}&e!"
+  title: "&6&lCongratulations!"
+  subtitle: "&e{skill} &7level up: &a{old} &7→ &a{level} &8| &b{rank}"
   max-broadcast: "&6{player} &ereached the maximum &6{skill} &elevel!"
 
-xp:
-  actionbar: "&7{skill} &a+{xp} XP &8(&f{cur}&7/&f{need}&8)"
+hud:
+  format: "&c❤ {hp}/{maxhp} &8| &bMana {mana}/{maxmana} &8| &e{skill} Lv.{level} &8| {ability}"
+  ready: "&aReady"
+  cooldown: "&7{s}s"
+  locked: "&8Lv.{level}"
+  xp-bar: "&e{skill} &7Lv.&a{level} &8| &a+{gained} XP &8| &f{cur}&7/&f{need}"
+  levelup-bar: "&6{skill} &a&lLEVEL UP! &7Lv.{level}"
+  max-bar: "&6{skill} &c&lMAX &7Lv.{level}"
+
+active:
+  locked: "&c{skill} ability unlocks at level {level}"
+  cooldown: "&cAbility ready in {s}s"
+  no-mana: "&cNot enough mana ({mana}/{cost})"
+  used: "&a{ability}!"
 
 ability:
   unlocked-title: "&d&lABILITY UNLOCKED"
   unlocked-subtitle: "&f{ability}"
   unlocked-chat: "&dNew ability unlocked: &f{ability} &8- &7{desc}"
+  slash:
+    name: "Slash Wave"
+    desc: "Right-click: hit all hostile mobs in front of you."
   lifesteal:
     name: "Vampiric Strike"
     desc: "Chance to heal when you hit a mob."
   executioner:
     name: "Executioner"
     desc: "Bonus damage to mobs below 30% health."
+  slam:
+    name: "Ground Slam"
+    desc: "Right-click: damage and knock back hostile mobs around you."
   cleave:
     name: "Cleave"
     desc: "Chance to hit nearby hostile mobs too."
   lumberjack:
     name: "Lumberjack"
     desc: "Chance to get double logs."
+  frenzy:
+    name: "Mining Frenzy"
+    desc: "Right-click: strong Haste for a while."
   haste:
     name: "Efficient Miner"
     desc: "Mining gives you a Haste boost."
@@ -83,6 +104,9 @@ ability:
   jackpot:
     name: "Jackpot"
     desc: "Small chance for triple drops from ores and stone."
+  leap:
+    name: "Earth Leap"
+    desc: "Right-click: jump forward and land softly."
   digger:
     name: "Fast Digger"
     desc: "Digging gives you a Haste boost."
@@ -100,6 +124,42 @@ proc:
 
 mob:
   rare-drop: "&d&lRARE DROP! &f{item} &7from a Lv.{level} {mob}"
+  oddity-drop: "&5Something strange dropped: &f{item}"
+
+mobs:
+  ZOMBIE: "Zombie"
+  ZOMBIE_VILLAGER: "Zombie Villager"
+  HUSK: "Husk"
+  DROWNED: "Drowned"
+  SKELETON: "Skeleton"
+  STRAY: "Stray"
+  BOGGED: "Bogged"
+  WITHER_SKELETON: "Wither Skeleton"
+  CREEPER: "Creeper"
+  SPIDER: "Spider"
+  CAVE_SPIDER: "Cave Spider"
+  ENDERMAN: "Enderman"
+  ENDERMITE: "Endermite"
+  SILVERFISH: "Silverfish"
+  WITCH: "Witch"
+  BLAZE: "Blaze"
+  SLIME: "Slime"
+  MAGMA_CUBE: "Magma Cube"
+  PHANTOM: "Phantom"
+  PILLAGER: "Pillager"
+  VINDICATOR: "Vindicator"
+  EVOKER: "Evoker"
+  RAVAGER: "Ravager"
+  VEX: "Vex"
+  GUARDIAN: "Guardian"
+  ELDER_GUARDIAN: "Elder Guardian"
+  HOGLIN: "Hoglin"
+  ZOGLIN: "Zoglin"
+  PIGLIN: "Piglin"
+  PIGLIN_BRUTE: "Piglin Brute"
+  ZOMBIFIED_PIGLIN: "Zombified Piglin"
+  BREEZE: "Breeze"
+  CREAKING: "Creaking"
 
 admin:
   usage-setlevel: "&cUsage: /rpg setlevel <player> <sword|axe|pickaxe|shovel> <level>"
@@ -107,8 +167,8 @@ admin:
   setlevel-ok: "&a{player}'s {skill} level is now {level}."
 
 antilag:
-  clear-warning: "&eGround items will be cleared in &c{seconds} &esecond(s)!"
-  clear-done: "&aCleared &f{items} &aground items."
+  clear-warning: "&eGround items will be cleared in &c{seconds}&e s"
+  clear-done: "&aCleared &f{items} &aground items"
   lag-on: "&cLag detected (TPS ~{tps}). Natural spawns paused and emergency cleanup started."
   lag-off: "&aTPS recovered (~{tps}). Natural spawns resumed."
   memory-high: "&cMemory usage is high ({used}/{max} MB). Cleanup started."

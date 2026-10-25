@@ -11,6 +11,7 @@ lang:
 help:
   - "&6&lMobMastery &7- komutlar"
   - "&e/skills &7- alet yeteneklerini ve özelliklerini göster"
+  - "&7Elinde bir alet varken &esağ tıkla &7(veya eğilip bir bloğa sağ tıkla) yeteneği kullan."
   - "&e/rpg lang <en|tr> &7- dilini değiştir"
   - "&e/rpg status &7- anti-lag durumu (yetkili)"
   - "&e/rpg cleanup &7- yerdeki eşyaları ve fazla mobları şimdi temizle (yetkili)"
@@ -50,30 +51,50 @@ skills:
   ability-locked: "&8- {name} &8({skill} Sv.{level} seviyesinde açılır)"
 
 levelup:
-  title: "&6&lSEVİYE ATLADIN!"
-  subtitle: "&e{skill} &7Sv.&a{level} &8- &b{rank}"
-  chat: "&6{skill} &eseviyen &a{level} &eoldu - rütbe: &b{rank}&e!"
+  title: "&6&lTebrikler!"
+  subtitle: "&e{skill} &7seviye atladın: &a{old} &7→ &a{level} &8| &b{rank}"
   max-broadcast: "&6{player} &emaksimum &6{skill} &eseviyesine ulaştı!"
 
-xp:
-  actionbar: "&7{skill} &a+{xp} XP &8(&f{cur}&7/&f{need}&8)"
+hud:
+  format: "&c❤ {hp}/{maxhp} &8| &bMana {mana}/{maxmana} &8| &e{skill} Sv.{level} &8| {ability}"
+  ready: "&aHazır"
+  cooldown: "&7{s}sn"
+  locked: "&8Sv.{level}"
+  xp-bar: "&e{skill} &7Sv.&a{level} &8| &a+{gained} XP &8| &f{cur}&7/&f{need}"
+  levelup-bar: "&6{skill} &a&lSEVİYE ATLADIN! &7Sv.{level}"
+  max-bar: "&6{skill} &c&lMAX &7Sv.{level}"
+
+active:
+  locked: "&c{skill} yeteneği {level}. seviyede açılır"
+  cooldown: "&cYetenek {s} sn sonra hazır"
+  no-mana: "&cYeterli mana yok ({mana}/{cost})"
+  used: "&a{ability}!"
 
 ability:
   unlocked-title: "&d&lÖZELLİK AÇILDI"
   unlocked-subtitle: "&f{ability}"
   unlocked-chat: "&dYeni özellik açıldı: &f{ability} &8- &7{desc}"
+  slash:
+    name: "Kılıç Dalgası"
+    desc: "Sağ tık: önündeki tüm düşman mob'lara vurur."
   lifesteal:
     name: "Vampir Vuruşu"
     desc: "Moblara vurunca can yenileme şansı."
   executioner:
     name: "Cellat"
-    desc: "Canı %30'un altındaki mobllara ekstra hasar."
+    desc: "Canı %30'un altındaki mob'lara ekstra hasar."
+  slam:
+    name: "Yer Darbesi"
+    desc: "Sağ tık: etrafındaki düşman mob'lara hasar verir ve geri iter."
   cleave:
     name: "Savurma"
-    desc: "Yakındaki düşman mobllara da vurma şansı."
+    desc: "Yakındaki düşman mob'lara da vurma şansı."
   lumberjack:
     name: "Oduncu"
     desc: "Çift kütük alma şansı."
+  frenzy:
+    name: "Madenci Çılgınlığı"
+    desc: "Sağ tık: bir süre güçlü Hız (Haste) kazanırsın."
   haste:
     name: "Verimli Madenci"
     desc: "Kazarken Hız (Haste) kazanırsın."
@@ -83,6 +104,9 @@ ability:
   jackpot:
     name: "Jackpot"
     desc: "Maden ve taştan üçlü eşya düşme şansı."
+  leap:
+    name: "Toprak Atılımı"
+    desc: "Sağ tık: ileri atlarsın ve yumuşak inersin."
   digger:
     name: "Hızlı Kazıcı"
     desc: "Toprak kazarken Hız (Haste) kazanırsın."
@@ -100,6 +124,42 @@ proc:
 
 mob:
   rare-drop: "&d&lNADİR EŞYA! &f{item} &7(Sv.{level} {mob})"
+  oddity-drop: "&5Garip bir şey düştü: &f{item}"
+
+mobs:
+  ZOMBIE: "Zombi"
+  ZOMBIE_VILLAGER: "Zombi Köylü"
+  HUSK: "Çöl Zombisi"
+  DROWNED: "Boğulmuş"
+  SKELETON: "İskelet"
+  STRAY: "Buz İskeleti"
+  BOGGED: "Bataklık İskeleti"
+  WITHER_SKELETON: "Wither İskeleti"
+  CREEPER: "Creeper"
+  SPIDER: "Örümcek"
+  CAVE_SPIDER: "Mağara Örümceği"
+  ENDERMAN: "Enderman"
+  ENDERMITE: "Endermite"
+  SILVERFISH: "Gümüş Balığı"
+  WITCH: "Cadı"
+  BLAZE: "Blaze"
+  SLIME: "Balçık"
+  MAGMA_CUBE: "Magma Küpü"
+  PHANTOM: "Phantom"
+  PILLAGER: "Yağmacı"
+  VINDICATOR: "Vindicator"
+  EVOKER: "Evoker"
+  RAVAGER: "Yıkıcı"
+  VEX: "Vex"
+  GUARDIAN: "Gardiyan"
+  ELDER_GUARDIAN: "Yaşlı Gardiyan"
+  HOGLIN: "Hoglin"
+  ZOGLIN: "Zoglin"
+  PIGLIN: "Piglin"
+  PIGLIN_BRUTE: "Vahşi Piglin"
+  ZOMBIFIED_PIGLIN: "Zombi Piglin"
+  BREEZE: "Breeze"
+  CREAKING: "Creaking"
 
 admin:
   usage-setlevel: "&cKullanım: /rpg setlevel <oyuncu> <sword|axe|pickaxe|shovel> <seviye>"
@@ -107,8 +167,8 @@ admin:
   setlevel-ok: "&a{player} oyuncusunun {skill} seviyesi artık {level}."
 
 antilag:
-  clear-warning: "&eYerdeki eşyalar &c{seconds} &esaniye içinde temizlenecek!"
-  clear-done: "&f{items} &ayerdeki eşya temizlendi."
+  clear-warning: "&eYerdeki eşyalar &c{seconds} &esn içinde temizlenecek"
+  clear-done: "&f{items} &ayerdeki eşya temizlendi"
   lag-on: "&cLag algılandı (TPS ~{tps}). Doğal mob doğumu durduruldu, acil temizlik başladı."
   lag-off: "&aTPS düzeldi (~{tps}). Doğal mob doğumu devam ediyor."
   memory-high: "&cBellek kullanımı yüksek ({used}/{max} MB). Temizlik başlatıldı."
