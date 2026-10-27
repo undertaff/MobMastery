@@ -10,6 +10,24 @@ Built against the Spigot API **1.21.10**. This is a first release, so please rep
 
 ## English
 
+## Latest update v1.1.0 (27.10.2026)
+
+**Supported versions:** Spigot / Paper 1.21.4, 1.21.10 and 1.21.11 (one jar for all, compiled against the Spigot API 1.21.4).
+**Tested on:** 1.21.4, 1.21.11
+**Not tested yet:** 1.21.10
+
+**What's new in v1.1.0**
+- **Mob names no longer show through walls.** The level and name tag only appears when you look straight at the mob. Mob names follow the server language (set `language: tr` in `config.yml` for Turkish mob names).
+- **Level ranges per dimension:** Overworld 1-35, Nether 10-60, End 1-10. Mobs get stronger the farther they spawn from the center.
+- **Random mob armor:** some leveled mobs now spawn with leather, golden, chainmail, iron or diamond armor. The netherite set is very rare (0.4%, levels 52-60 only).
+- **Rare strange drops:** goat horn, echo shard, heart of the sea and similar items drop very rarely from mobs.
+- **Quieter anti-lag:** no more chat spam. A short item-clear countdown shows in the action bar, and admin alerts go to the console only.
+- **XP bar:** a bar at the top of the screen shows your XP when you gain it and disappears after a few seconds.
+- **Level-up screen:** a "Congratulations" title shows the skill and the level you left and reached (for example 5 → 6).
+- **HUD:** while holding a tool, the bottom of the screen shows your health, mana, skill level and ability status.
+- **Right-click abilities (unlock at level 5):** Slash Wave (sword), Ground Slam (axe), Mining Frenzy (pickaxe), Earth Leap (shovel). They use mana and have a cooldown. Right-click in the air, or sneak and right-click a block.
+- **Config and language files updated.** If you update from v1.0.0, delete the old `config.yml` and the `lang` folder in `plugins/MobMastery/` so the new ones are created.
+
 ### Table of contents
 - [Features](#features)
 - [How leveled mobs work](#how-leveled-mobs-work)
@@ -136,6 +154,24 @@ The jar will be at `target/MobMastery.jar`. This repository also includes a GitH
 ---
 
 ## Türkçe
+
+## Son güncelleme v1.1.0 (27.10.2026)
+
+**Desteklenen sürümler:** Spigot / Paper 1.21.4, 1.21.10 ve 1.21.11 (hepsi için tek jar, Spigot API 1.21.4 ile derlendi).
+**Test edilen sürümler:** 1.21.4, 1.21.11
+**Henüz test edilmeyen:** 1.21.10
+
+**v1.1.0'da neler yeni**
+- **Mob isimleri artık duvar arkasından görünmüyor.** Seviye ve isim etiketi sadece mobun üstüne nişan alınca çıkar. Mob isimleri sunucu dilini kullanır (Türkçe mob isimleri için `config.yml` içinde `language: tr` yap).
+- **Boyuta göre seviye aralıkları:** Normal dünya 1-35, Nether 10-60, End 1-10. Merkezden uzaklaştıkça mob'lar güçlenir.
+- **Rastgele mob zırhı:** bazı seviyeli mob'lar deri, altın, zincir, demir veya elmas zırhla doğar. Netherite set çok nadirdir (%0,4, sadece 52-60. seviye).
+- **Nadir garip eşyalar:** keçi boynuzu, yankı parçası, deniz kalbi gibi eşyalar mob'lardan çok nadir düşer.
+- **Daha sessiz anti-lag:** sohbet kirliliği yok. Eşya temizliği için kısa bir geri sayım ekranın altında (action bar) görünür, yönetici uyarıları sadece konsola gider.
+- **XP çubuğu:** XP kazanınca ekranın üst ortasında bir çubuk çıkar ve birkaç saniye sonra kaybolur.
+- **Seviye atlama ekranı:** ortada "Tebrikler!" yazar, hangi beceri olduğunu ve eski seviyeden yeni seviyeye geçişi gösterir (örnek 5 → 6).
+- **HUD:** elinde bir alet varken ekranın altında canın, manan, beceri seviyen ve yetenek durumun görünür.
+- **Sağ tık yetenekleri (5. seviyede açılır):** Kılıç Dalgası (kılıç), Yer Darbesi (balta), Madenci Çılgınlığı (kazma), Toprak Atılımı (kürek). Mana harcarlar ve bekleme süreleri vardır. Havaya sağ tıkla ya da eğilip bir bloğa sağ tıkla.
+- **Ayar ve dil dosyaları güncellendi.** v1.0.0'dan güncelliyorsan `plugins/MobMastery/` içindeki eski `config.yml` dosyasını ve `lang` klasörünü sil, yenileri oluşsun.
 
 ### İçindekiler
 - [Özellikler](#özellikler)
