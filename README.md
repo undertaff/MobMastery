@@ -28,6 +28,8 @@ Built against the Spigot API **1.21.10**. This is a first release, so please rep
 - **Right-click abilities (unlock at level 5):** Slash Wave (sword), Ground Slam (axe), Mining Frenzy (pickaxe), Earth Leap (shovel). They use mana and have a cooldown. Right-click in the air, or sneak and right-click a block.
 - **Config and language files updated.** If you update from v1.0.0, delete the old `config.yml` and the `lang` folder in `plugins/MobMastery/` so the new ones are created.
 
+##
+
 ### Table of contents
 - [Features](#features)
 - [How leveled mobs work](#how-leveled-mobs-work)
@@ -172,6 +174,8 @@ The jar will be at `target/MobMastery.jar`. This repository also includes a GitH
 - **HUD:** elinde bir alet varken ekranın altında canın, manan, beceri seviyen ve yetenek durumun görünür.
 - **Sağ tık yetenekleri (5. seviyede açılır):** Kılıç Dalgası (kılıç), Yer Darbesi (balta), Madenci Çılgınlığı (kazma), Toprak Atılımı (kürek). Mana harcarlar ve bekleme süreleri vardır. Havaya sağ tıkla ya da eğilip bir bloğa sağ tıkla.
 - **Ayar ve dil dosyaları güncellendi.** v1.0.0'dan güncelliyorsan `plugins/MobMastery/` içindeki eski `config.yml` dosyasını ve `lang` klasörünü sil, yenileri oluşsun.
+
+##
 
 ### İçindekiler
 - [Özellikler](#özellikler)
